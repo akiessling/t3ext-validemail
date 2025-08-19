@@ -1,0 +1,54 @@
+{
+    "name": "andreaskiessling/validemail",
+    "description": "Extends the TYPO3 email validation, see https://forge.typo3.org/issues/102629 and https://github.com/egulias/EmailValidator/issues/359",
+    "license": [
+        "GPL-2.0-or-later"
+    ],
+    "type": "typo3-cms-extension",
+    "keywords": [
+        "TYPO3 CMS"
+    ],
+    "require": {
+        "typo3/cms-core": "^12.4",
+        "php": ">=7.4.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.5",
+        "typo3/testing-framework": "^8.2",
+        "g1a/composer-test-scenarios": "^3.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "AndreasKiessling\\ValidEmail\\": "../../Classes/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "AndreasKiessling\\ValidEmail\\Tests\\": "../../Tests/"
+        }
+    },
+    "config": {
+        "platform": {
+            "php": "8.2.24"
+        },
+        "allow-plugins": {
+            "ergebnis/composer-normalize": true,
+            "g1a/composer-test-scenarios": true,
+            "typo3/class-alias-loader": true,
+            "typo3/cms-composer-installers": true
+        },
+        "sort-packages": true,
+        "vendor-dir": "../../vendor"
+    },
+    "extra": {
+        "typo3/cms": {
+            "extension-key": "validemail",
+            "web-dir": ".Build/Web"
+        }
+    },
+    "scripts": {
+        "test": "phpunit -c Build/phpunit/UnitTests.xml",
+        "test:detail": "phpunit -c Build/phpunit/UnitTests.xml --display-skipped --display-warnings",
+        "test:testdox": "phpunit -c Build/phpunit/UnitTests.xml --testdox"
+    }
+}
