@@ -24,7 +24,7 @@ See these issues for additional information:
 ### Via Composer (recommended)
 
 ```bash
-composer require andreaskiessling/ak-validemail
+composer require andreaskiessling/validemail
 ```
 
 ### Testing
