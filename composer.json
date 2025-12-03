@@ -48,10 +48,7 @@
 					"platform": {
 						"php": "7.4.33"
 					}
-				},
-                "scenario-options": {
-                  "update-with-dependencies-option": "--no-audit"
-                }
+				}
 			},
 			"typo3-12": {
 				"require": {
@@ -91,8 +88,5 @@
 		"test": "phpunit -c Build/phpunit/UnitTests.xml",
 		"test:detail": "phpunit -c Build/phpunit/UnitTests.xml --display-skipped --display-warnings",
 		"test:testdox": "phpunit -c Build/phpunit/UnitTests.xml --testdox"
-	},
-    "audit": {
-      "block-insecure": false
-    }
+	}
 }
