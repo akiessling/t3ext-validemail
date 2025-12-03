@@ -19,32 +19,27 @@ jobs:
           - '8.4'
           - '8.2'
           - '8.1'
-          - '8.0'
-          - '7.4'
         typo3-version:
+          - '14'
           - '13'
           - '12'
-          - '11'
         exclude:
+          # TYPO3 14 requires PHP >= 8.2, phpunit requires >= 8.3
+          - php-version: '8.1'
+            typo3-version: '14'
+          - php-version: '8.2'
+            typo3-version: '14'
           # TYPO3 13 requires PHP >= 8.2, phpunit requires >= 8.3
-          - php-version: '7.4'
-            typo3-version: '13'
-          - php-version: '8.0'
-            typo3-version: '13'
           - php-version: '8.1'
             typo3-version: '13'
           - php-version: '8.2'
             typo3-version: '13'
           # TYPO3 12 requires PHP >= 8.1, phpunit requires >= 8.2
-          - php-version: '7.4'
-            typo3-version: '12'
           - php-version: '8.0'
             typo3-version: '12'
           - php-version: '8.1'
             typo3-version: '12'
-          # TYPO3 11 requires PHP >= 7.4 and <= 8.3
-          - php-version: '8.4'
-            typo3-version: '11'
+
 
     name: Tests (PHP ${{ matrix.php-version }}, TYPO3 ${{ matrix.typo3-version }})
 
@@ -73,7 +68,7 @@ jobs:
       - name: Install dependencies
         run: |
           composer install --no-progress --prefer-dist --optimize-autoloader
-          composer scenario typo3-${{ matrix.typo3-version }}
+          COMPOSER_NO_AUDIT=1 composer scenario typo3-${{ matrix.typo3-version }}
 
       - name: Run unit tests
         run: composer run test

@@ -1,3 +1,4 @@
-/.Build
+.Build
+.scenarios.lock
 /vendor
 /composer.lock
