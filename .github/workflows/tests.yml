@@ -15,8 +15,9 @@ jobs:
       fail-fast: false
       matrix:
         php-version:
-          - '8.3'
+          - '8.5'
           - '8.4'
+          - '8.3'
           - '8.2'
           - '8.1'
         typo3-version:
@@ -38,6 +39,8 @@ jobs:
           - php-version: '8.0'
             typo3-version: '12'
           - php-version: '8.1'
+            typo3-version: '12'
+          - php-version: '8.5'
             typo3-version: '12'
 
 

@@ -1,5 +1,5 @@
 
-# validemail - Enhanced Email TLD Validation for TYPO3 v11 to v13
+# validemail - Enhanced Email TLD Validation for TYPO3 v12 to v14
 
 The `validemail` extension extends TYPO3's standard email validation with an improved TLD validation. It adds a check for the domain, so that at least one dot is present after the @-sign.
 
@@ -31,7 +31,6 @@ composer require andreaskiessling/validemail
 Running the unit tests with https://github.com/nektos/act and g1a/composer-test-scenarios locally:
 
 ```bash
-act --matrix php-version:7.4 --action-offline-mode
 act --matrix php-version:8.1 --action-offline-mode
 act --matrix php-version:8.2 --action-offline-mode
 act --matrix php-version:8.3 --action-offline-mode
