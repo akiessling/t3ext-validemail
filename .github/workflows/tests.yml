@@ -56,8 +56,10 @@ jobs:
 
       - name: Install dependencies for TYPO3 ${{ matrix.typo3 }}
         run: |
-          composer require typo3/cms-core:^${{ matrix.typo3 }} --dev --no-update --no-interaction --no-progress
-          composer update typo3/cms-core --with-all-dependencies --no-interaction --no-progress --no-audit
+          composer require typo3/cms-core:^${{ matrix.typo3 }} --no-interaction --no-progress --no-audit
+
+          # optional: show resolved versions for easier debugging
+          composer show typo3/cms-core --no-interaction
 
       - name: Run unit tests
         run: composer test
