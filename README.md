@@ -27,15 +27,57 @@ See these issues for additional information:
 composer require andreaskiessling/validemail
 ```
 
-### Testing
-Running the unit tests with https://github.com/nektos/act and g1a/composer-test-scenarios locally:
+## Testing (local Docker matrix)
+
+This repository contains a local Docker-based test matrix to run the unit tests against multiple TYPO3 and PHP versions.
+
+### Prerequisites
+
+- Docker with `docker compose`
+- GNU Make (optional, but convenient)
+
+### Build / rebuild the PHP test runner images
+
+Build all images (uses cache where possible):
 
 ```bash
-act --matrix php-version:7.4 --action-offline-mode
-act --matrix php-version:8.1 --action-offline-mode
-act --matrix php-version:8.2 --action-offline-mode
-act --matrix php-version:8.3 --action-offline-mode
-act --matrix php-version:8.4 --action-offline-mode
+make build
 ```
+
+Force a clean rebuild (helpful after changing `docker/php-cli/Dockerfile`):
+
+```bash
+make rebuild
+```
+
+### Run the full test matrix
+
+```bash
+make test-matrix
+```
+
+
+Each matrix entry runs in its own sandbox under:
+
+- `.Build/matrix/<profile>/`
+
+This keeps your working tree clean (no `vendor/` or `composer.lock` changes in the repo root).
+
+### Run only a single matrix entry (or a subset)
+
+You can filter matrix entries by substring:
+
+```bash
+make test-matrix-filter FILTER=t14 
+make test-matrix-filter FILTER=13.4:php84:t13
+```
+
+
+Tip: To see all available entries, open `scripts/test-matrix.sh` and look at the `MATRIX=(...)` list.
+
+### Note about TYPO3 v11 and Composer security advisories
+
+TYPO3 v11 is EOL and flagged by Packagist security advisories. For local matrix testing, the script disables Composer's "block insecure" mechanism inside the TYPO3 v11 sandbox only. This is done purely to keep legacy test coverage; it is not a recommendation for production usage.
+
 
 This extension will hopefully be obsolete once https://github.com/egulias/EmailValidator/issues/359 is solved.
