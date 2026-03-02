@@ -4,7 +4,7 @@ on:
   push:
     branches: [ main, master, develop ]
   pull_request:
-    branches: [ main, master, develop ]
+    branches: [ main, master, develop, testing-setup ]
 
 jobs:
   tests:
@@ -20,7 +20,11 @@ jobs:
           - php: '8.2'
             typo3: '13.4'
           - php: '8.3'
-            typo3: '14.0'
+            typo3: '14'
+          - php: '8.4'
+            typo3: '14'
+          - php: '8.5'
+            typo3: '14'
 
     name: Tests (PHP ${{ matrix.php }}, TYPO3 ${{ matrix.typo3 }})
 
@@ -46,10 +50,14 @@ jobs:
           key: ${{ runner.os }}-composer-${{ matrix.typo3 }}-${{ hashFiles('**/composer.json') }}
           restore-keys: ${{ runner.os }}-composer-
 
+      - name: Allow insecure packages for TYPO3 11 (EOL) in CI
+        if: ${{ startsWith(matrix.typo3, '11.') }}
+        run: composer config audit.block-insecure false --no-interaction
+
       - name: Install dependencies for TYPO3 ${{ matrix.typo3 }}
         run: |
-          composer require typo3/cms-core:^${{ matrix.typo3 }} --dev --no-progress
-          composer install --no-progress
+          composer require typo3/cms-core:^${{ matrix.typo3 }} --dev --no-update --no-interaction --no-progress
+          composer update typo3/cms-core --with-all-dependencies --no-interaction --no-progress --no-audit
 
       - name: Run unit tests
         run: composer test
