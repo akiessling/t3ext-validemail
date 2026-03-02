@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  php81:
+    image: php:8.1-fpm
+    volumes:
+      - ./html:/var/www/html
+
+  php82:
+    image: php:8.2-fpm
+    volumes:
+      - ./html:/var/www/html
+
+  php83:
+    image: php:8.3-fpm
+    volumes:
+      - ./html:/var/www/html
+
+profiles:
+  typos_VERSION_11:
+    services:
+      - php81
+  typos_VERSION_12:
+    services:
+      - php82
+  typos_VERSION_13:
+    services:
+      - php83
