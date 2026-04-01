@@ -66,9 +66,9 @@ for combo in "${MATRIX[@]}"; do
           composer config audit.block-insecure false --no-interaction
         fi
 
-        composer require \"typo3/cms-core:^${TYPO3_VERSION}\" --dev --no-interaction --no-progress --no-audit
+        composer require \"typo3/cms-core:^${TYPO3_VERSION}\" --no-interaction --no-progress --no-audit
 
-        composer test
+        composer test:testdox
     "; then
         echo -e "${GREEN}✅ ${combo} passed${NC}"
     else
