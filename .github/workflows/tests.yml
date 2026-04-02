@@ -2,60 +2,40 @@ name: Tests
 
 on:
   push:
-    branches: [ main, master, develop ]
+    branches: [ main, master, develop, testing-setup ]
   pull_request:
-    branches: [ main, master, develop ]
+    branches: [ main, master, develop, testing-setup ]
 
 jobs:
   tests:
     runs-on: ubuntu-latest
-
     strategy:
-      max-parallel: 1
       fail-fast: false
       matrix:
-        php-version:
-          - '8.3'
-          - '8.4'
-          - '8.2'
-          - '8.1'
-          - '8.0'
-          - '7.4'
-        typo3-version:
-          - '13'
-          - '12'
-          - '11'
-        exclude:
-          # TYPO3 13 requires PHP >= 8.2, phpunit requires >= 8.3
-          - php-version: '7.4'
-            typo3-version: '13'
-          - php-version: '8.0'
-            typo3-version: '13'
-          - php-version: '8.1'
-            typo3-version: '13'
-          - php-version: '8.2'
-            typo3-version: '13'
-          # TYPO3 12 requires PHP >= 8.1, phpunit requires >= 8.2
-          - php-version: '7.4'
-            typo3-version: '12'
-          - php-version: '8.0'
-            typo3-version: '12'
-          - php-version: '8.1'
-            typo3-version: '12'
-          # TYPO3 11 requires PHP >= 7.4 and <= 8.3
-          - php-version: '8.4'
-            typo3-version: '11'
+        include:
+          - php: '8.1'
+            typo3: '11.5'
+          - php: '8.2'
+            typo3: '12.4'
+          - php: '8.2'
+            typo3: '13.4'
+          - php: '8.3'
+            typo3: '14'
+          - php: '8.4'
+            typo3: '14'
+          - php: '8.5'
+            typo3: '14'
 
-    name: Tests (PHP ${{ matrix.php-version }}, TYPO3 ${{ matrix.typo3-version }})
+    name: Tests (PHP ${{ matrix.php }}, TYPO3 ${{ matrix.typo3 }})
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php-version }}
+          php-version: ${{ matrix.php }}
           extensions: intl, mbstring, pdo_sqlite
           coverage: none
 
@@ -64,20 +44,26 @@ jobs:
         run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Cache dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
+          key: ${{ runner.os }}-composer-${{ matrix.typo3 }}-${{ hashFiles('**/composer.json') }}
           restore-keys: ${{ runner.os }}-composer-
 
-      - name: Install dependencies
+      - name: Allow insecure packages for TYPO3 11 (EOL) in CI
+        if: ${{ startsWith(matrix.typo3, '11.') }}
+        run: composer config audit.block-insecure false --no-interaction
+
+      - name: Install dependencies for TYPO3 ${{ matrix.typo3 }}
         run: |
-          composer install --no-progress --prefer-dist --optimize-autoloader
-          composer scenario typo3-${{ matrix.typo3-version }}
+          composer require typo3/cms-core:^${{ matrix.typo3 }} --no-interaction --no-progress --no-audit
+
+          # optional: show resolved versions for easier debugging
+          composer show typo3/cms-core --no-interaction
 
       - name: Run unit tests
-        run: composer run test
+        run: composer test
 
       - name: Run unit tests with details
         if: failure()
-        run: composer run test:detail
+        run: composer test:detail

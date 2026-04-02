@@ -1,0 +1,84 @@
+services:
+  php81:
+    build:
+      context: .
+      dockerfile: docker/php-cli/Dockerfile
+      args:
+        PHP_VERSION: "8.1"
+    profiles: ["t11", "t12"]
+    container_name: t3ext-php81
+    volumes:
+      - .:/workspace
+      - composer-cache:/tmp/composer-cache
+    working_dir: /workspace
+    environment:
+      COMPOSER_CACHE_DIR: /tmp/composer-cache
+    command: /bin/sh
+
+  php82:
+    build:
+      context: .
+      dockerfile: docker/php-cli/Dockerfile
+      args:
+        PHP_VERSION: "8.2"
+    profiles: ["t12", "t13"]
+    container_name: t3ext-php82
+    volumes:
+      - .:/workspace
+      - composer-cache:/tmp/composer-cache
+    working_dir: /workspace
+    environment:
+      COMPOSER_CACHE_DIR: /tmp/composer-cache
+    command: /bin/sh
+
+  php83:
+    build:
+      context: .
+      dockerfile: docker/php-cli/Dockerfile
+      args:
+        PHP_VERSION: "8.3"
+    profiles: ["t13", "t14"]
+    container_name: t3ext-php83
+    volumes:
+      - .:/workspace
+      - composer-cache:/tmp/composer-cache
+    working_dir: /workspace
+    environment:
+      COMPOSER_CACHE_DIR: /tmp/composer-cache
+    command: /bin/sh
+
+  php84:
+    build:
+      context: .
+      dockerfile: docker/php-cli/Dockerfile
+      args:
+        PHP_VERSION: "8.4"
+    profiles: ["t13", "t14"]
+    container_name: t3ext-php84
+    volumes:
+      - .:/workspace
+      - composer-cache:/tmp/composer-cache
+    working_dir: /workspace
+    environment:
+      COMPOSER_CACHE_DIR: /tmp/composer-cache
+    command: /bin/sh
+
+  php85:
+    build:
+      context: .
+      dockerfile: docker/php-cli/Dockerfile
+      args:
+        PHP_VERSION: "8.5"
+    profiles: ["t13", "t14"]
+    container_name: t3ext-php85
+    volumes:
+      - .:/workspace
+      - composer-cache:/tmp/composer-cache
+    working_dir: /workspace
+    environment:
+      COMPOSER_CACHE_DIR: /tmp/composer-cache
+    command: /bin/sh
+
+volumes:
+  composer-cache:
+    driver: local
